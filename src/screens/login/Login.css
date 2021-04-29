@@ -1,3 +1,4 @@
+/*Styling for Card*/
 .cardStyle {
     width: 280px;
     padding: 30px 40px;
@@ -10,6 +11,7 @@
     width: 248px;
 }
 
+/*Styling for FormHelperText*/
 .red{
     color: red;
 }
