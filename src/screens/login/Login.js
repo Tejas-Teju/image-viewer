@@ -9,6 +9,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 class Login extends Component {
 
@@ -17,6 +18,7 @@ class Login extends Component {
         this.state = {
             username: "",
             password: "",
+            invalidCredentials: "dispNone",
         };
     }
 
@@ -41,6 +43,8 @@ class Login extends Component {
         if(this.state.username === username && this.state.password === password){
             sessionStorage.setItem("access-token", accessToken);
             ReactDOM.render(<div>Home Page</div>, document.getElementById('root'));
+        } else {
+            this.setState({invalidCredentials: "dispBlock"});
         }
     }
 
@@ -59,7 +63,9 @@ class Login extends Component {
                 <FormControl required className="formControl">
                     <InputLabel htmlFor="password">Password</InputLabel>
                     <Input id="password" type="password" password={this.state.password} onChange={this.inputPasswordChangeHandler}/>
-                </FormControl> <br/><br/>
+                </FormControl><br/><br/>
+                <FormHelperText className={this.state.invalidCredentials}><span className="red">Incorrect username and/or password</span></FormHelperText>
+                <br/>
                 <Button variant="contained" color="primary" onClick={this.loginClickHandler}>
                     LOGIN
                 </Button>
