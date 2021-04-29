@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
+import Button from '@material-ui/core/Button';
 
 class Login extends Component {
     render() {
@@ -25,6 +26,9 @@ class Login extends Component {
                     <InputLabel htmlFor="password">Password</InputLabel>
                     <Input id="password" type="password" />
                 </FormControl> <br/><br/>
+                <Button variant="contained" color="primary">
+                    LOGIN
+                </Button>
               </CardContent>
             </Card>
           </div>;
