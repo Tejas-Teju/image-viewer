@@ -21,6 +21,10 @@ class Login extends Component {
                     <InputLabel htmlFor="username">Username</InputLabel>
                     <Input id="username" type="text" />
                 </FormControl><br/><br/>
+                <FormControl required className="formControl">
+                    <InputLabel htmlFor="password">Password</InputLabel>
+                    <Input id="password" type="password" />
+                </FormControl> <br/><br/>
               </CardContent>
             </Card>
           </div>;
