@@ -18,6 +18,8 @@ class Login extends Component {
         this.state = {
             username: "",
             password: "",
+            reqUsername: "dispNone",
+            reqPassword: "dispNone",
             invalidCredentials: "dispNone",
         };
     }
@@ -39,18 +41,26 @@ class Login extends Component {
 
         let accessToken = "8661455776.d0fcd39.39f63ab2f88d4f9c92b0862729ee2784";
 
+        if(this.state.username === "" || this.state.password === "") {
+            // Check for empty fields of username and password and display required if clicked on Login button
+            this.state.username === "" ? this.setState({reqUsername: "dispBlock"}): this.setState({reqUsername:"dispNone"});
+            this.state.password === "" ? this.setState({reqPassword: "dispBlock"}): this.setState({reqPassword:"dispNone"});
+            this.setState({invalidCredentials: "dispNone"});
+        }
         // If login credentials are correct then store the access-token and go to home page
-        if(this.state.username === username && this.state.password === password){
+        else if(this.state.username === username && this.state.password === password){
             sessionStorage.setItem("access-token", accessToken);
             ReactDOM.render(<div>Home Page</div>, document.getElementById('root'));
         } else {
-            this.setState({invalidCredentials: "dispBlock"});
+            this.setState({reqUsername:"dispNone", reqPassword:"dispNone", invalidCredentials: "dispBlock"});
         }
     }
 
     render() {
-        return <div>
+        return (
+            <div>
             <Header />
+
             <Card className="cardStyle">
               <CardContent>
                 <Typography variant="h5" gutterBottom>
@@ -59,10 +69,12 @@ class Login extends Component {
                 <FormControl required className="formControl"> 
                     <InputLabel htmlFor="username">Username</InputLabel>
                     <Input id="username" type="text" username={this.state.username} onChange={this.inputUsernameChangeHandler}/>
+                    <FormHelperText className={this.state.reqUsername}><span className="red">required</span></FormHelperText>
                 </FormControl><br/><br/>
                 <FormControl required className="formControl">
                     <InputLabel htmlFor="password">Password</InputLabel>
                     <Input id="password" type="password" password={this.state.password} onChange={this.inputPasswordChangeHandler}/>
+                    <FormHelperText className={this.state.reqPassword}><span className="red">required</span></FormHelperText>
                 </FormControl><br/><br/>
                 <FormHelperText className={this.state.invalidCredentials}><span className="red">Incorrect username and/or password</span></FormHelperText>
                 <br/>
@@ -71,7 +83,8 @@ class Login extends Component {
                 </Button>
               </CardContent>
             </Card>
-          </div>;
+            </div>
+        );
     }
 }
 
