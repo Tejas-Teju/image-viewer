@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import { Redirect } from 'react-router-dom';
 import Header from '../../common/header/Header';
 import './Login.css';
 import Card from '@material-ui/core/Card';
@@ -23,6 +23,7 @@ class Login extends Component {
             reqUsername: "dispNone",
             reqPassword: "dispNone",
             invalidCredentials: "dispNone",
+            isLoggedIn: false,
         };
     }
 
@@ -52,7 +53,7 @@ class Login extends Component {
         // If login credentials are correct then store the access-token and go to home page
         else if(this.state.username === username && this.state.password === password){
             sessionStorage.setItem("access-token", accessToken);
-            ReactDOM.render(<div>Home Page</div>, document.getElementById('root'));
+            this.setState({isLoggedIn: true,});
         } else {
             //Do not display required on entering invalid credentials after filling up the username and password fields
             this.setState({reqUsername:"dispNone", reqPassword:"dispNone", invalidCredentials: "dispBlock"});
@@ -62,31 +63,40 @@ class Login extends Component {
     render() {
         return (
             <div>
-                <Header />
-
-                <Card className="cardStyle">
-                    <CardContent>
-                        <Typography variant="h5" gutterBottom>
-                            LOGIN
-                        </Typography>
-                        <FormControl required className="formControl"> 
-                            <InputLabel htmlFor="username">Username</InputLabel>
-                            <Input id="username" type="text" username={this.state.username} onChange={this.inputUsernameChangeHandler}/>
-                            <FormHelperText className={this.state.reqUsername}><span className="red">required</span></FormHelperText>
-                        </FormControl><br/><br/>
-                        <FormControl required className="formControl">
-                            <InputLabel htmlFor="password">Password</InputLabel>
-                            <Input id="password" type="password" password={this.state.password} onChange={this.inputPasswordChangeHandler}/>
-                            <FormHelperText className={this.state.reqPassword}><span className="red">required</span></FormHelperText>
-                        </FormControl><br/><br/>
-                        <FormHelperText className={this.state.invalidCredentials}><span className="red">Incorrect username and/or password</span></FormHelperText>
-                        <br/>
-                        <Button variant="contained" color="primary" onClick={this.loginClickHandler}>
-                            LOGIN
-                        </Button>
-                    </CardContent>
-                </Card>
+                {this.state.isLoggedIn === true ?
+                    <Redirect to= "/home"/>
+                    : 
+                    <div>
+                        <Header />
+        
+                        <Card className="cardStyle">
+                            <CardContent>
+                                <Typography variant="h5" gutterBottom>
+                                    LOGIN
+                                </Typography>
+                                <FormControl required className="formControl"> 
+                                    <InputLabel htmlFor="username">Username</InputLabel>
+                                    <Input id="username" type="text" username={this.state.username} onChange={this.inputUsernameChangeHandler}/>
+                                    <FormHelperText className={this.state.reqUsername}><span className="red">required</span></FormHelperText>
+                                </FormControl>
+                                <br/><br/>
+                                <FormControl required className="formControl">
+                                    <InputLabel htmlFor="password">Password</InputLabel>
+                                    <Input id="password" type="password" password={this.state.password} onChange={this.inputPasswordChangeHandler}/>
+                                    <FormHelperText className={this.state.reqPassword}><span className="red">required</span></FormHelperText>
+                                </FormControl>
+                                <br/><br/>
+                                <FormHelperText className={this.state.invalidCredentials}><span className="red">Incorrect username and/or password</span></FormHelperText>
+                                <br/>
+                                <Button variant="contained" color="primary" onClick={this.loginClickHandler}>
+                                    LOGIN
+                                </Button>
+                            </CardContent>
+                        </Card>
+                    </div>
+                }
             </div>
+            
         );
     }
 }
