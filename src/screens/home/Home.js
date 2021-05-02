@@ -31,20 +31,20 @@ const styles = (theme => ({
         height: 60,
     },
     title: { //Style for the title of the card 
-        'font-weight': '600',
+        fontWeight: '600',
     },
     media: { // style for the image in the card
         height: "56.25%",
         width: "100%",
     },
     comment: { //for the form control
-        "flex-direction": "row",
-        "margin-top": "25px",
-        "align-items": "baseline",
-        "justify-content": "center",
+        flexDirection: "row",
+        marginTop: "10px",
+        alignItems: "baseline",
+        justifyContent: "center",
     },
     addCommentBtn: { // ADD button styling 
-        "margin-left": "15px",
+        marginLeft: "15px",
     },
     commentUsername: {  //style for the userName of the comment
         fontSize: "inherit",
@@ -93,7 +93,13 @@ class Home extends Component {
                         d = d.toLocaleString('en-GB').split(","); // convert it to local string in 24 hrs format and split it
                         json.date = d[0]; // after splitting data in 0th index is date, add a property date to the current object
                         json.time = d[1].trim(); // after splitting data in 1st index is time, add a property time to the current object
-                        json.caption = image.caption; // add a property caption to the current object by extracting it from mediaIdsAndCaptions array 
+                        json.caption = image.caption.split("\n#")[0]; // add a property caption to the current object by extracting it from mediaIdsAndCaptions array 
+                        json.hastags = "";
+                        image.caption.split(" ").forEach((element) => {
+                            if(element[0] === "#") {
+                                json.hastags = json.hastags + " " + element;
+                            }
+                        });
                         this.setState({ imageData: this.state.imageData.concat(json) }); // add each object to array imageData
 
                         if(i === 0) { // Since there is no Api to get profile picture, used 1st image from the response as profile picture
@@ -210,10 +216,10 @@ class Home extends Component {
                                                 <img src={image.media_url} alt="profileImage" className={classes.media} />
                                                 <div className="horizontal-line"></div>
                                                 <div className="image-caption">
-                                                    {image.caption.split("\n#")[0]}
+                                                    {image.caption}
                                                 </div>
                                                 <div className="image-hashtags">
-                                                    {image.caption.split("\n#")[1] !== undefined ? "#"+image.caption.split("\n#")[1] : image.caption.split("\n#")[1]}
+                                                    {image.hastags}
                                                 </div>
 
                                                 {/* like button */}
