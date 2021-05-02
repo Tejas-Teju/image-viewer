@@ -79,7 +79,7 @@ class Header extends Component {
                             {this.props.showProfileIcon ?  
                                 <span>
                                     <IconButton id="profile-icon" onClick={this.profileButtonClickedHandler}>
-                                        <img src={this.props.profile_picture} alt="profileImage" id="profile-picture" />
+                                        <img src={this.props.profilePicture} alt="profileImage" id="profile-picture" />
                                     </IconButton>
                                     <Menu id="profile-menu" anchorEl={this.state.anchorEl} open={this.state.menuIsOpen} onClose={this.profileButtonClickedHandler}>
                                         <MenuList className={classes.menuList}>
