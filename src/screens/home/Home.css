@@ -1,0 +1,7 @@
+/* style for the div containing the grid  */
+.flex-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-flow: wrap;
+}

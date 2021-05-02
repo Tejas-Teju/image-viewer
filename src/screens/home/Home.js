@@ -1,6 +1,32 @@
 import React, {Component} from 'react';
 import Header from '../../common/header/Header';
+import './Home.css';
 import { Redirect } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import Avatar from '@material-ui/core/Avatar';
+
+// Custom Styles to over ride material ui default styles
+const styles = (theme => ({
+    grid: { //style for the grid component 
+        padding: "20px",
+        marginLeft: "10%",
+        marginRight: "10%",
+    },
+    card: { //style for the card component 
+        maxWidth: "100%",
+    },
+    avatar: { //style for the avatar in the card header 
+        margin: 10,
+        width: 60,
+        height: 60,
+    },
+    title: { //Style for the title of the card 
+        'font-weight': '600',
+    },
+}));
 
 class Home extends Component {
     constructor() {
@@ -51,7 +77,8 @@ class Home extends Component {
     }
 
     render() {
-        const { imageData } = this.state;
+        // custom styles are stored in the const classes
+        const { classes } = this.props;
 
         return(
             <div>
@@ -60,9 +87,21 @@ class Home extends Component {
                     :
                     <div>
                         <Header profilePicture={this.state.profilePicture} showSearchBox={this.state.isLoggedIn ? true : false} showProfileIcon={this.state.isLoggedIn ? true : false}/>
-                        { imageData.map(e => {
-                            return <img key={e.id} src={e.media_url} alt="Profile"/>   
-                        })}   
+                        <div className="flex-container">
+                            <Grid container spacing={3} wrap="wrap" alignContent="center" className={classes.grid}>
+                                {/* Iteration over imageData array and render each element of array */}
+                                {this.state.imageData.map(image => (           
+                                    <Grid key={image.id} item xs={12} sm={6}>
+                                        <Card className={classes.card}>
+                                            <CardHeader classes={{ title: classes.title,}}
+                                                avatar={ <Avatar src={image.media_url} className={classes.avatar}></Avatar>}
+                                                title={image.username} subheader={image.date + " " + image.time} className={classes.cardheader}
+                                            />
+                                        </Card>
+                                    </Grid>
+                                ))}
+                            </Grid>  
+                        </div> 
                     </div> 
                 }
             </div>
@@ -70,4 +109,4 @@ class Home extends Component {
     }
 }
 
-export default Home;
+export default withStyles(styles)(Home);
