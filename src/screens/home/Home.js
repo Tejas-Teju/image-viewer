@@ -3,6 +3,7 @@ import Header from '../../common/header/Header';
 import './Home.css';
 import { Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
+import { FormControl } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -11,13 +12,15 @@ import CardContent from '@material-ui/core/CardContent';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 // Custom Styles to over ride material ui default styles
 const styles = (theme => ({
     grid: { //style for the grid component 
         padding: "20px",
-        marginLeft: "10%",
-        marginRight: "10%",
     },
     card: { //style for the card component 
         maxWidth: "100%",
@@ -34,6 +37,19 @@ const styles = (theme => ({
         height: "56.25%",
         width: "100%",
     },
+    comment: { //for the form control
+        "flex-direction": "row",
+        "margin-top": "25px",
+        "align-items": "baseline",
+        "justify-content": "center",
+    },
+    addCommentBtn: { // ADD button styling 
+        "margin-left": "15px",
+    },
+    commentUsername: {  //style for the userName of the comment
+        fontSize: "inherit",
+        fontWeight: '600',
+    }
 }));
 
 class Home extends Component {
@@ -46,6 +62,8 @@ class Home extends Component {
             mediaIdsAndCaptions: [],
             imageData: [],
             defaultCount: 1,
+            commentText: "",
+            currentCommentId: "",
         };
     }
 
@@ -100,11 +118,33 @@ class Home extends Component {
         }
     }
 
+    // This method sets the state of commentText using text entered
+    onCommentTextChangeHandler = (e, imageId) => {
+        this.setState({commentText: e.target.value, currentCommentId: imageId});
+    }
+
+    // On ADD button clicked, comments and comment count are added to comments array as JSON objects 
+    AddBtnHandler = (imageId) => {
+        let obj = this.state.imageData.find(element => element.id === imageId);
+
+        if (this.state.commentText !== ""){ // Do not add comments if it is empty
+            if(obj.comments === undefined) {
+                obj.commentCount = 1;
+                obj.comments = [{comment : this.state.commentText, commentCount : obj.commentCount, commentId: obj.id}];
+                this.setState({commentText: ""});
+            } else {
+                obj.comments = [...obj.comments, {comment : this.state.commentText, commentCount : obj.commentCount + 1, commentId: obj.id}];
+                obj.commentCount = obj.commentCount + 1;
+                this.setState({commentText: ""});
+            }
+        }
+    }
+
     render() {
         // custom styles are stored in the const classes
         const { classes } = this.props;
         var { defaultCount } = this.state;
-
+    
         return(
             <div>
                 {this.state.isLoggedIn === false ?
@@ -146,6 +186,29 @@ class Home extends Component {
                                                         image.count === 1 ? <span>{image.count} like</span> : <span>{image.count} likes</span>
                                                     }
                                                 </div>
+                                                
+                                                {image.commentCount === undefined ? // if comment count is undefined then do not display anything
+                                                    "" :
+                                                    image.comments.map(element => (         //Iterating over comments array to show the comments to the corresponding image 
+                                                        <div className="comment-display" key={element.commentCount}>
+                                                            <Typography variant="subtitle2" className={classes.commentUsername} gutterbottom="true" >
+                                                                {image.username}:
+                                                            </Typography>
+                                                            <Typography variant="body1" id="comment-text-alt" className="comment-text" gutterbottom="true">
+                                                                {element.comment}
+                                                            </Typography>
+                                                        </div>
+                                                    ))
+                                                }
+
+                                                {/* Input to add comment consist of Input ,InputLabel and ADD button */}
+                                                <FormControl className={classes.comment} fullWidth={true}>
+                                                    <InputLabel htmlFor={image.id} >Add a comment</InputLabel>
+                                                    <Input id={image.id} className="comment-text" type="text" onChange={(event) => this.onCommentTextChangeHandler(event, image.id)} value={image.id === this.state.currentCommentId? this.state.commentText : ""}/>
+                                                    <Button variant="contained" color="primary" className={classes.addCommentBtn} onClick={() => this.AddBtnHandler(image.id)}>
+                                                        ADD
+                                                    </Button>
+                                                </FormControl>
                                             </CardContent>
                                         </Card>
                                     </Grid>
