@@ -87,13 +87,14 @@ class Home extends Component {
 
     likeBtnHandler = (imageId) => {
         let obj = this.state.imageData.find(element => element.id === imageId);
-        
-        if(obj.count === undefined) {
-            obj.count = this.state.defaultCount + 1;
-            obj.userLiked = true;
+
+        if (obj.userLiked === true) {
+            obj.count = this.state.defaultCount;
+            obj.userLiked = false;
             this.setState({});
         } else {
-            obj.count = obj.count + 1;
+            obj.count = this.state.defaultCount + 1;
+            obj.userLiked = true;
             this.setState({});
         }
     }
@@ -134,7 +135,7 @@ class Home extends Component {
                                                 {/* like button */}
                                                 <IconButton id="like-button" aria-label="like-button" onClick={() => this.likeBtnHandler(image.id)}>
                                                     {/* Border is red if user already liked the image else border is displayed */}
-                                                    {image.userLiked === undefined ? 
+                                                    {image.userLiked === undefined || image.userLiked === false ? 
                                                         <FavoriteBorderIcon className="like-icon" fontSize="large" /> : <FavoriteIcon className="liked-icon" fontSize="large" />}
                                                 </IconButton>
                                                 {/* if count is 1, like is displayed else likes is displayed*/}
