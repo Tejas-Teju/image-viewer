@@ -83,16 +83,17 @@ class Home extends Component {
                 })
             })
         } 
-    } 
+    }
 
+    // This method increments and decrements the number of like and adds the userLiked and count to object
     likeBtnHandler = (imageId) => {
         let obj = this.state.imageData.find(element => element.id === imageId);
 
-        if (obj.userLiked === true) {
-            obj.count = this.state.defaultCount;
+        if (obj.userLiked === true) { // if user already liked the image then decrement the count
+            obj.count = obj.count - 1;
             obj.userLiked = false;
             this.setState({});
-        } else {
+        } else { // if user didn't like the image then increment the count and set userLiked to true
             obj.count = this.state.defaultCount + 1;
             obj.userLiked = true;
             this.setState({});
@@ -130,21 +131,21 @@ class Home extends Component {
                                                 <div className="image-hashtags">
                                                     {image.caption.split("\n#")[1] !== undefined ? "#"+image.caption.split("\n#")[1] : image.caption.split("\n#")[1]}
                                                 </div>
-                                                <div>
 
                                                 {/* like button */}
-                                                <IconButton id="like-button" aria-label="like-button" onClick={() => this.likeBtnHandler(image.id)}>
-                                                    {/* Border is red if user already liked the image else border is displayed */}
-                                                    {image.userLiked === undefined || image.userLiked === false ? 
-                                                        <FavoriteBorderIcon className="like-icon" fontSize="large" /> : <FavoriteIcon className="liked-icon" fontSize="large" />}
-                                                </IconButton>
-                                                {/* if count is 1, like is displayed else likes is displayed*/}
-                                                {image.count === undefined ? 
-                                                    defaultCount === 1 ? <span>{defaultCount} like</span> : <span>{defaultCount} likes</span> 
-                                                    : 
-                                                    image.count === 1 ? <span>{image.count} like</span> : <span>{image.count} likes</span>
-                                                }
-                                            </div>
+                                                <div>
+                                                    <IconButton id="like-button" aria-label="like-button" onClick={() => this.likeBtnHandler(image.id)}>
+                                                        {/* Border is red if user already liked the image else border is displayed */}
+                                                        {image.userLiked === undefined || image.userLiked === false ? 
+                                                            <FavoriteBorderIcon className="like-icon" fontSize="large" /> : <FavoriteIcon className="liked-icon" fontSize="large" />}
+                                                    </IconButton>
+                                                    {/* if count is 1, like is displayed else likes is displayed*/}
+                                                    {image.count === undefined ? 
+                                                        defaultCount === 1 ? <span>{defaultCount} like</span> : <span>{defaultCount} likes</span> 
+                                                        : 
+                                                        image.count === 1 ? <span>{image.count} like</span> : <span>{image.count} likes</span>
+                                                    }
+                                                </div>
                                             </CardContent>
                                         </Card>
                                     </Grid>
