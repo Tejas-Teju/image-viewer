@@ -79,7 +79,7 @@ class Header extends Component {
                             {this.props.showProfileIcon ?  
                                 <span>
                                     <IconButton id="profile-icon" onClick={this.profileButtonClickedHandler}>
-                                        <img src="https://scontent.cdninstagram.com/v/t51.29350-15/133727129_826954304812183_722079783531579720_n.jpg?_nc_cat=110&ccb=1-3&_nc_sid=8ae9d6&_nc_ohc=rdMfksgtV_cAX85t6nn&_nc_ht=scontent.cdninstagram.com&oh=74ab3881a52024243b3f4ab9ac0e2f2d&oe=60B12CC4" alt="profileImage" id="profile-picture" />
+                                        <img src={this.props.profile_picture} alt="profileImage" id="profile-picture" />
                                     </IconButton>
                                     <Menu id="profile-menu" anchorEl={this.state.anchorEl} open={this.state.menuIsOpen} onClose={this.profileButtonClickedHandler}>
                                         <MenuList className={classes.menuList}>
