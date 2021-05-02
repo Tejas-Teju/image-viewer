@@ -54,6 +54,11 @@ class Header extends Component {
         })  
     }
 
+    // This is called when there are any changes in search box
+    onSearchChangeHandler = (e) => {
+        this.props.onSearchTextChange(e.target.value);
+    }
+
     render() {
         //custom Styles are stored in classes
         const { classes } = this.props;
@@ -70,7 +75,7 @@ class Header extends Component {
                             {this.props.showSearchBox ?                  
                                 <span className="header-searchbox">
                                     <SearchIcon id="search-icon"></SearchIcon>
-                                    <Input className={classes.searchText} placeholder="Search…" disableUnderline={true} />
+                                    <Input className={classes.searchText} placeholder="Search…" disableUnderline={true} onChange={this.onSearchChangeHandler} />
                                 </span>
                                 : "" //Do not display search box
                             }

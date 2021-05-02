@@ -64,6 +64,8 @@ class Home extends Component {
             defaultCount: 1,
             commentText: "",
             currentCommentId: "",
+            searchOn: false,
+            copyOfImageData: {},
         };
     }
 
@@ -140,6 +142,48 @@ class Home extends Component {
         }
     }
 
+    // This method updates the imageData array based on "keyword" search
+    onSearchTextChange = (keyword) => {
+        if (!(keyword === "")) { //check if search input keyword value is empty
+            var copyOfImageData = []; 
+            /* copy of imagaData array based on searchOn value
+               SearchOn value is true when any character is entered in search box and is true until keyword is null
+               updatedImageArr - updated image array based on keyword
+            */
+            this.state.searchOn ? copyOfImageData = this.state.copyOfImageData : copyOfImageData = this.state.imageData;
+            var updatedImageArr = []; 
+            var searchOn = true; // 
+            keyword = keyword.toLowerCase(); 
+            
+            copyOfImageData.forEach((element) => {
+                var caption = element.caption.split("\n#")[0]; // extracting the caption
+                caption = caption.toLowerCase();
+                if (caption.match(keyword)) {  //matching keyword with caption 
+                    updatedImageArr.push(element); //if any character matches push it to updatedImageArr 
+                }
+            })
+            if (!this.state.searchOn) { // For the first search
+                this.setState({
+                    searchOn: searchOn,
+                    images: updatedImageArr,
+                    copyOfImageData: copyOfImageData,
+
+                })
+            } else { // Until keyword is null
+                this.setState({                 
+                    imageData: updatedImageArr,
+                })
+            }
+        } else { // If keyword is null then search is false and assign copyOfImageData to imageData array and set copyOfImageData to empty array
+            this.setState({
+                searchOn: false,
+                imageData: this.state.copyOfImageData,
+                copyOfImageData: [],
+            })
+
+        }
+    }
+
     render() {
         // custom styles are stored in the const classes
         const { classes } = this.props;
@@ -151,7 +195,7 @@ class Home extends Component {
                     <Redirect to= "/"/>
                     :
                     <div>
-                        <Header profilePicture={this.state.profilePicture} showSearchBox={this.state.isLoggedIn ? true : false} showProfileIcon={this.state.isLoggedIn ? true : false}/>
+                        <Header profilePicture={this.state.profilePicture} showSearchBox={this.state.isLoggedIn ? true : false} showProfileIcon={this.state.isLoggedIn ? true : false} onSearchTextChange={this.onSearchTextChange}/>
                         <div className="flex-container">
                             <Grid container spacing={3} wrap="wrap" alignContent="center" className={classes.grid}>
                                 {/* Iteration over imageData array and render each element of array */}
