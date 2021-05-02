@@ -7,6 +7,10 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
+import CardContent from '@material-ui/core/CardContent';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import IconButton from '@material-ui/core/IconButton';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 // Custom Styles to over ride material ui default styles
 const styles = (theme => ({
@@ -26,6 +30,10 @@ const styles = (theme => ({
     title: { //Style for the title of the card 
         'font-weight': '600',
     },
+    media: { // style for the image in the card
+        height: "56.25%",
+        width: "100%",
+    },
 }));
 
 class Home extends Component {
@@ -37,6 +45,7 @@ class Home extends Component {
             accessToken: sessionStorage.getItem("access-token"),
             mediaIdsAndCaptions: [],
             imageData: [],
+            defaultCount: 1,
         };
     }
 
@@ -74,11 +83,25 @@ class Home extends Component {
                 })
             })
         } 
+    } 
+
+    likeBtnHandler = (imageId) => {
+        let obj = this.state.imageData.find(element => element.id === imageId);
+        
+        if(obj.count === undefined) {
+            obj.count = this.state.defaultCount + 1;
+            obj.userLiked = true;
+            this.setState({});
+        } else {
+            obj.count = obj.count + 1;
+            this.setState({});
+        }
     }
 
     render() {
         // custom styles are stored in the const classes
         const { classes } = this.props;
+        var { defaultCount } = this.state;
 
         return(
             <div>
@@ -94,9 +117,34 @@ class Home extends Component {
                                     <Grid key={image.id} item xs={12} sm={6}>
                                         <Card className={classes.card}>
                                             <CardHeader classes={{ title: classes.title,}}
-                                                avatar={ <Avatar src={image.media_url} className={classes.avatar}></Avatar>}
+                                                avatar={ <Avatar src={this.state.profilePicture} className={classes.avatar}></Avatar>}
                                                 title={image.username} subheader={image.date + " " + image.time} className={classes.cardheader}
                                             />
+                                            <CardContent id="card-content">
+                                                <img src={image.media_url} alt="profileImage" className={classes.media} />
+                                                <div className="horizontal-line"></div>
+                                                <div className="image-caption">
+                                                    {image.caption.split("\n#")[0]}
+                                                </div>
+                                                <div className="image-hashtags">
+                                                    {image.caption.split("\n#")[1] !== undefined ? "#"+image.caption.split("\n#")[1] : image.caption.split("\n#")[1]}
+                                                </div>
+                                                <div>
+
+                                                {/* like button */}
+                                                <IconButton id="like-button" aria-label="like-button" onClick={() => this.likeBtnHandler(image.id)}>
+                                                    {/* Border is red if user already liked the image else border is displayed */}
+                                                    {image.userLiked === undefined ? 
+                                                        <FavoriteBorderIcon className="like-icon" fontSize="large" /> : <FavoriteIcon className="liked-icon" fontSize="large" />}
+                                                </IconButton>
+                                                {/* if count is 1, like is displayed else likes is displayed*/}
+                                                {image.count === undefined ? 
+                                                    defaultCount === 1 ? <span>{defaultCount} like</span> : <span>{defaultCount} likes</span> 
+                                                    : 
+                                                    image.count === 1 ? <span>{image.count} like</span> : <span>{image.count} likes</span>
+                                                }
+                                            </div>
+                                            </CardContent>
                                         </Card>
                                     </Grid>
                                 ))}
