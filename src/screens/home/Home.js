@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
 import Header from "../../common/header/Header";
 import "./Home.css";
 import { Redirect } from "react-router-dom";
@@ -121,6 +122,15 @@ class Home extends Component {
                 this.setState({ imageData: this.state.imageData.concat(json) }); // add each object to array imageData
               });
           });
+        })
+        .catch((ex) => {
+          ReactDOM.render(
+            <div style={{ margin: "10% auto" }}>
+              <h1>403 Request Limit Error: come back later :)</h1>
+              <p>Message: Default Instagram request limit exceeded.....</p>
+            </div>,
+            document.getElementsByClassName("flex-container")[0]
+          );
         });
     }
   };

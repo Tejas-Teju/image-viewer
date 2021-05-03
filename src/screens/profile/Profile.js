@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
 import { Redirect } from "react-router-dom";
 import "./Profile.css";
 import Header from "../../common/header/Header";
@@ -153,6 +154,15 @@ class Profile extends Component {
                 }
               });
           });
+        })
+        .catch((ex) => {
+          ReactDOM.render(
+            <div style={{ margin: "10% auto" }}>
+              <h1>403 Request Limit Error: come back later :)</h1>
+              <p>Message: Default Instagram request limit exceeded.....</p>
+            </div>,
+            document.getElementsByClassName("flex-container")[0]
+          );
         });
     }
   };
