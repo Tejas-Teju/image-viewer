@@ -74,6 +74,8 @@
 .image-modal-right {
     width: 50%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .image-modal-profile-icon {
@@ -84,10 +86,12 @@
 }
 
 .image-modal-username {
-    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     margin-left: 10px;
-    position: absolute; 
     font-weight: bold;
+    padding-bottom: 10px;
 }
 
 /* remove outline from image modal */
@@ -95,8 +99,25 @@
     outline: 0;
     border-radius: 5px;
     border: 2px solid rgb(215, 215, 215);
+    overflow: overlay;
 }
 
 .right-top {
     margin-bottom: 5px;
+}
+
+.right-top-image-username-container {
+    display: flex;
+}
+
+/* style for to space between right middle and bottom container */
+.right-middleBottom-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.comments-container {
+    margin-top: 10px;
 }

@@ -42,12 +42,25 @@ const styles = theme => ({
         flexDirection: 'row',
         width: 800,
         height: 400,
-        marginTop: 100,
-        marginLeft: 300,
+        marginTop: "7%",
+        margin: 'auto',
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[5],
         padding: "30px",
     },
+    comment: {
+        flexDirection: "row",
+        marginTop: "5px",
+        alignItems: "baseline",
+        justifyContent: "center",
+    },
+    addCommentBtn: {
+        marginLeft: "15px",
+    },
+    commentUsername: {
+        fontSize: "inherit",
+        fontWeight: "bolder"
+    }
 })
 
 const TabContainer = function (props) {
@@ -77,6 +90,8 @@ class Profile extends Component {
             currentProfilePicture: "",
             userLiked: false,
             defaultLikes: 2,
+            commentText: "",
+            currentCommentId: "",
         }
     }
 
@@ -106,7 +121,7 @@ class Profile extends Component {
                         json.time = d[1].trim(); // after splitting data in 1st index is time, add a property time to the current object
                         json.caption = image.caption.split("\n#")[0]; // add a property caption to the current object by extracting it from mediaIdsAndCaptions array 
                         json.hastags = "";
-                        image.caption.split(" ").forEach((element) => {
+                        image.caption.split(/\s+/).forEach((element) => {
                             if(element[0] === "#") {
                                 json.hastags = json.hastags + " " + element;
                             }
@@ -175,6 +190,28 @@ class Profile extends Component {
             this.setState({});
         }
     }
+
+    // This method sets the state of commentText using text entered
+    onCommentTextChangeHandler = (e, imageId) => {
+        this.setState({commentText: e.target.value, currentCommentId: imageId});
+    }
+
+    // On ADD button clicked, comments and comment count are added to comments array as JSON objects 
+    AddBtnHandler = (imageId) => {
+        let obj = this.state.imageData.find(element => element.id === imageId);
+
+        if (this.state.commentText !== ""){ // Do not add comments if it is empty
+            if(obj.comments === undefined) {
+                obj.commentCount = 1;
+                obj.comments = [{comment : this.state.commentText, commentCount : obj.commentCount, commentId: obj.id}];
+                this.setState({commentText: ""});
+            } else {
+                obj.comments = [...obj.comments, {comment : this.state.commentText, commentCount : obj.commentCount + 1, commentId: obj.id}];
+                obj.commentCount = obj.commentCount + 1;
+                this.setState({commentText: ""});
+            }
+        }
+    }
     
     render() {
         //custom Styles are stored in classes
@@ -236,26 +273,54 @@ class Profile extends Component {
                                         </div>
                                         <div className="image-modal-right">
                                             <div className="right-top">
-                                                <img className="image-modal-profile-icon" src={this.state.currentProfilePicture} alt={this.state.fullName} />
-                                                <span className="image-modal-username">{this.state.username}</span>
+                                                <div className="right-top-image-username-container">
+                                                    <img className="image-modal-profile-icon" src={this.state.currentProfilePicture} alt={this.state.fullName} />
+                                                    <span className="image-modal-username">{this.state.username}</span>
+                                                </div>
                                                 <div className="horizontal-line"></div>
                                             </div>
-                                            <div className="right-middle">
-                                                <div >{this.state.currentImage.caption}</div>
-                                                <div className="image-hashtags">{this.state.currentImage.hastags}</div>
-                                            </div>
-                                            <div className="right-botton">
-                                                <IconButton id="like-button" aria-label="like-button" onClick={() => this.likeBtnHandler(this.state.currentImage.id)}>
-                                                    {/* Border is red if user already liked the image else border is displayed */}
-                                                    {currentImage.userLiked === undefined || currentImage.userLiked === false ? 
-                                                        <FavoriteBorderIcon className="like-icon" fontSize="large" /> : <FavoriteIcon className="liked-icon" fontSize="large" />}
-                                                </IconButton>
-                                                {/* if count is 1, like is displayed else likes is displayed*/}
-                                                {currentImage.count === undefined ? 
-                                                    defaultLikes === 1 ? <span>{defaultLikes} like</span> : <span>{defaultLikes} likes</span> 
-                                                    : 
-                                                    currentImage.count === 1 ? <span>{currentImage.count} like</span> : <span>{currentImage.count} likes</span>
-                                                }
+                                            <div className="right-middleBottom-container">
+                                                <div className="right-middle">
+                                                    <div >{this.state.currentImage.caption}</div>
+                                                    <div className="image-hashtags">{this.state.currentImage.hastags}</div>
+                                                    <div className="comments-container">
+                                                        {currentImage.commentCount === undefined ? // if comment count is undefined then do not display anything
+                                                            "" :
+                                                            currentImage.comments.map(element => (         //Iterating over comments array to show the comments to the corresponding image 
+                                                                <div className="comment-display" key={element.commentCount}>
+                                                                    <Typography variant="subtitle2" className={classes.commentUsername} gutterbottom="true" >
+                                                                        {currentImage.username}:
+                                                                    </Typography>
+                                                                    <Typography variant="body1" id="comment-text-alt" className="comment-text" gutterbottom="true">
+                                                                        {element.comment}
+                                                                    </Typography>
+                                                                </div>
+                                                            ))
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    {/* Like button */}
+                                                    <IconButton id="like-button" aria-label="like-button" onClick={() => this.likeBtnHandler(this.state.currentImage.id)}>
+                                                        {/* Border is red if user already liked the image else border is displayed */}
+                                                        {currentImage.userLiked === undefined || currentImage.userLiked === false ? 
+                                                            <FavoriteBorderIcon className="like-icon" fontSize="large" /> : <FavoriteIcon className="liked-icon" fontSize="large" />}
+                                                    </IconButton>
+                                                    {/* if count is 1, like is displayed else likes is displayed*/}
+                                                    {currentImage.count === undefined ? 
+                                                        defaultLikes === 1 ? <span>{defaultLikes} like</span> : <span>{defaultLikes} likes</span> 
+                                                        : 
+                                                        currentImage.count === 1 ? <span>{currentImage.count} like</span> : <span>{currentImage.count} likes</span>
+                                                    }
+                                                    {/* add comments section */}
+                                                    <FormControl className={classes.comment} fullWidth={true}>
+                                                        <InputLabel htmlFor="comment" >Add a comment</InputLabel>
+                                                        <Input id="comment" className="comment-text" type="text" onChange={(event) => this.onCommentTextChangeHandler(event, currentImage.id)} value={currentImage.id === this.state.currentCommentId? this.state.commentText : ""}/>
+                                                        <Button variant="contained" color="primary" className={classes.addCommentBtn} onClick={() => this.AddBtnHandler(currentImage.id)}>
+                                                            ADD
+                                                        </Button>
+                                                    </FormControl>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
