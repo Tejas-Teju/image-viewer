@@ -70,7 +70,7 @@ class Header extends Component {
                     :
                     <div>
                         <header className="app-header">
-                            <a href='/' id="logo">Image Viewer</a>
+                            <a href='/home' id="logo">Image Viewer</a>
                             {/* Search box shown only when showSearchBox is true */} 
                             {this.props.showSearchBox ?                  
                                 <span className="header-searchbox">
