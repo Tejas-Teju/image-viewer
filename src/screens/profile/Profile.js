@@ -6,13 +6,35 @@ import { Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
+import Modal from '@material-ui/core/Modal';
+import InputLabel from "@material-ui/core/InputLabel";
+import Input from '@material-ui/core/Input';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 const styles = theme => ({
     fab: {
         margin: theme.spacing(1.5),
         marginTop: 0,
     },
+    paper: {
+        backgroundColor: "#fff",
+        boxShadow: theme.shadows[5],
+        padding: '25px 20px',
+    },
+    modal: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 })
+
+const TabContainer = function (props) {
+    return (
+        <Typography component="div" style={{ padding: 0}}>{props.children}</Typography>
+    );
+}
 
 class Profile extends Component {
     constructor() {
@@ -26,7 +48,35 @@ class Profile extends Component {
             noOfPosts: 10,
             follows: 100,
             followedBy: 100,
+            modalIsOpen: false,
+            fullNameRequired: "dispNone",
+            newName: "",
         }
+    }
+
+    // Sets state of modalIsOpen to true when EditIcon button is clicked
+    fullNameEditOpenModalHandler = () => {
+        this.setState({modalIsOpen: true});
+    };
+
+    // Sets state of modalIsOpen to false when clicked anywhere outside modal
+    fullNameEditCloseModalHandler = () => {
+        this.setState({modalIsOpen: false, fullNameRequired: "dispNone"});
+    };
+
+    // Stores User input for full name in the newName state variable
+    editFullNameHandler = (e) => {
+        this.setState({ newName: e.target.value });
+    }
+
+    // On click of the update button, the name input is saved to fullName and close the modal and if input is empty then "required" is displayed
+    updateFullNameHandler = () => {
+        this.state.newName === "" ? this.setState({ fullNameRequired: "dispBlock" }) : this.setState({
+            fullNameRequired: "dispNone",
+            fullName: this.state.newName,
+            newName: "",
+            modalIsOpen: false
+        });
     }
 
     render() {
@@ -53,11 +103,26 @@ class Profile extends Component {
                                 </Typography>
                                 <Typography variant="h6" component="h6">
                                     <div>{this.state.fullName}
-                                        <Fab color="secondary" aria-label="edit" className={classes.fab}>
+                                        <Fab color="secondary" aria-label="edit" className={classes.fab} onClick={this.fullNameEditOpenModalHandler}>
                                             <EditIcon />
                                         </Fab>
                                     </div>
                                 </Typography>
+
+                                {/* Edit Icon modal */}
+                                <Modal className={classes.modal} open={this.state.modalIsOpen} onClose={this.fullNameEditCloseModalHandler} aria-labelledby="edit-icon">
+                                    <div className={classes.paper}>
+                                        <h2 className="heading-h2">Edit</h2>
+                                        <TabContainer>
+                                            <FormControl required>
+                                                <InputLabel htmlFor="fullname">Full Name</InputLabel>
+                                                <Input id="fullname" type="text" fullname={this.state.fullName} onChange={this.editFullNameHandler} />
+                                                <FormHelperText className={this.state.fullNameRequired}><span className="red">required</span></FormHelperText>
+                                            </FormControl><br />
+                                        </TabContainer><br />
+                                        <Button variant="contained" color="primary" onClick={this.updateFullNameHandler}>UPDATE</Button>
+                                    </div>
+                                </Modal> 
                             </div>
                         </div>
                     </div>

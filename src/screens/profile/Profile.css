@@ -1,9 +1,11 @@
+/* style for profile image*/
 .profile-image {
     border-radius: 50%;
     width: 150px;
     height: 150px;
 }
 
+/* style for profile image and profile info summary */
 .flex-container {
     display: flex;
     flex-direction: row;
@@ -29,3 +31,20 @@
     margin-left: 80px;
 }
 
+/* remove outline from modal */
+.Profile-paper-2 {
+    outline: 0;
+    border-radius: 5px;
+    border: 2px solid rgb(215, 215, 215);
+}
+
+/* style for edit icon modal heading */
+.heading-h2 {
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.dispNone {
+    display: none;
+}
