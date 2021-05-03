@@ -25,6 +25,11 @@
 
 #profile-username {
     margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.profile-fullname {
+    font-weight: 500;
 }
 
 .spacing {
@@ -47,4 +52,10 @@
 
 .dispNone {
     display: none;
+}
+
+/* style for grid-list-container */
+.images-container {
+    margin-top: 1.5em;
+    margin-bottom: 2.5em;
 }

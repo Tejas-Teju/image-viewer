@@ -11,6 +11,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
 
 const styles = theme => ({
     fab: {
@@ -27,7 +29,11 @@ const styles = theme => ({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-    }
+    },
+    gridListMain: {
+        transform: 'translateZ(0)',
+        cursor: 'pointer',
+    },
 })
 
 const TabContainer = function (props) {
@@ -42,7 +48,8 @@ class Profile extends Component {
         this.state = {
             isLoggedIn: sessionStorage.getItem("access-token") == null ? false : true,
             accessToken:sessionStorage.getItem("access-token"),
-            profilePicture: "https://scontent.cdninstagram.com/v/t51.29350-15/116007663_2971510962975451_2540312586520375176_n.jpg?_nc_cat=104&ccb=1-3&_nc_sid=8ae9d6&_nc_ohc=jHT5B84rqzgAX-H9hA8&_nc_ht=scontent.cdninstagram.com&oh=61c7422cbaf470935836a5af0f890b0e&oe=60B2788B",
+            imageData: [],
+            profilePicture: "",
             username: "tejas_cricketer",
             fullName: "Tejas S",
             noOfPosts: 10,
@@ -51,7 +58,60 @@ class Profile extends Component {
             modalIsOpen: false,
             fullNameRequired: "dispNone",
             newName: "",
+            imageModalIsOpen: false,
+            currentImageId: "",
+            currentImage: "",
+            currentProfilePicture: "",
+            currentImgName: "",
+            currentCaption: "",
+            currentTags: "",
+            userLiked: false,
+            currentLikeStatus: "",
+            defaultLikes: 1,
+            likeCounts: "",
         }
+    }
+
+    componentDidMount = () => {  
+        // fetch data only when user is logged In
+        if (this.state.isLoggedIn) {
+            // fetch media ID and Caption using 1st Api
+            fetch(this.props.baseUrl + "me/media?fields=id,caption&access_token=" + this.state.accessToken) 
+            .then(function(response) {
+                return response.json();
+            })
+            .then((json) => {
+                // Storing media objects as an array of objects in state variable called mediaIdsAndCaptions
+                this.setState({ mediaIdsAndCaptions: json.data });
+                
+                // loop through each object in mediaIdsAndCaptions array to get imageData
+                this.state.mediaIdsAndCaptions.forEach((image, i) => {
+                    // fetch id, media_type, media_url, username, timestamp using 2nd Api
+                    fetch(this.props.baseUrl + image.id + "?fields=id,media_type,media_url,username,timestamp&access_token=" + this.state.accessToken)
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then((json) => {
+                        var d = new Date(json.timestamp); // extract timestamp from the json response
+                        d = d.toLocaleString('en-GB').split(","); // convert it to local string in 24 hrs format and split it
+                        json.date = d[0]; // after splitting data in 0th index is date, add a property date to the current object
+                        json.time = d[1].trim(); // after splitting data in 1st index is time, add a property time to the current object
+                        json.caption = image.caption.split("\n#")[0]; // add a property caption to the current object by extracting it from mediaIdsAndCaptions array 
+                        json.hastags = "";
+                        image.caption.split(" ").forEach((element) => {
+                            if(element[0] === "#") {
+                                json.hastags = json.hastags + " " + element;
+                            }
+                        });
+                        this.setState({ imageData: this.state.imageData.concat(json) }); // add each object to array imageData
+
+                        if(i === 0) { // Since there is no Api to get profile picture, used 1st image from the response as profile picture
+                            this.setState({ profilePicture: json.media_url });
+                        }
+                    })
+                })
+            })
+        } 
     }
 
     // Sets state of modalIsOpen to true when EditIcon button is clicked
@@ -79,6 +139,21 @@ class Profile extends Component {
         });
     }
 
+    // Sets the clicked image details in the state variable
+    imageClickHandler = (image) => {
+        this.setState({
+            imageModalIsOpen: true,
+            currentImageId: image.id,
+            currentImage: image.media_url,
+            currentProfilePicture: this.state.profilePicture,
+            currentImgName: this.state.fullName,
+            currentCaption: image.caption,
+            currentTags: image.hastags,
+            currentLikeStatus: this.state.userLiked, //***change needed
+            likeCounts: this.state.defaultLikes, //***changes needed
+        });
+    }
+
     render() {
         //custom Styles are stored in classes
         const { classes } = this.props;
@@ -102,7 +177,7 @@ class Profile extends Component {
                                     <span className="spacing"> Followed By: {this.state.followedBy} </span>
                                 </Typography>
                                 <Typography variant="h6" component="h6">
-                                    <div>{this.state.fullName}
+                                    <div><span className="profile-fullname">{this.state.fullName}</span>
                                         <Fab color="secondary" aria-label="edit" className={classes.fab} onClick={this.fullNameEditOpenModalHandler}>
                                             <EditIcon />
                                         </Fab>
@@ -123,6 +198,15 @@ class Profile extends Component {
                                         <Button variant="contained" color="primary" onClick={this.updateFullNameHandler}>UPDATE</Button>
                                     </div>
                                 </Modal> 
+                            </div>
+                            <div className="images-container">
+                                <GridList cellHeight={350} cols={3} className={classes.gridListMain}>
+                                    {this.state.imageData.map(image => (
+                                        <GridListTile onClick={() => this.imageClickHandler(image)} className="image-grid-item" key={"grid" + image.id}>
+                                            <img src={image.media_url} alt={image.id} />
+                                        </GridListTile>
+                                    ))}
+                                </GridList>
                             </div>
                         </div>
                     </div>
