@@ -34,6 +34,17 @@ const styles = theme => ({
         transform: 'translateZ(0)',
         cursor: 'pointer',
     },
+    modalStyle: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: 800,
+        height: 400,
+        marginTop: 100,
+        marginLeft: 300,
+        backgroundColor: theme.palette.background.paper,
+        boxShadow: theme.shadows[5],
+        padding: "30px",
+    },
 })
 
 const TabContainer = function (props) {
@@ -154,6 +165,11 @@ class Profile extends Component {
         });
     }
 
+    // Sets imageCloseModalHandler to false when clicked outside the modal
+    imageCloseModalHandler = () => {
+        this.setState({ imageModalIsOpen: false });
+    }
+    
     render() {
         //custom Styles are stored in classes
         const { classes } = this.props;
@@ -207,6 +223,18 @@ class Profile extends Component {
                                         </GridListTile>
                                     ))}
                                 </GridList>
+                                <Modal className={classes.imageModal} open={this.state.imageModalIsOpen} onClose={this.imageCloseModalHandler} aria-labelledby="individual-image-modal">
+                                    <div className={classes.modalStyle}>
+                                        <div className="image-modal-left">
+                                            <img className="clicked-image" src={this.state.currentImage} alt={this.state.currentImgName} />
+                                        </div>
+                                        <div className="image-modal-right">
+                                            <img className="image-modal-profile-icon" src={this.state.currentProfilePicture} alt={this.state.fullName} />
+                                            <span className="image-modal-username">{this.state.username}</span>
+                                            <div className="horizontal-line"></div>
+                                        </div>
+                                    </div>
+                                </Modal>
                             </div>
                         </div>
                     </div>

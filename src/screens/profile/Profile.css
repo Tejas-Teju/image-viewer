@@ -59,3 +59,40 @@
     margin-top: 1.5em;
     margin-bottom: 2.5em;
 }
+
+/* image modal styling */
+.image-modal-left {
+    width: 50%;
+    height: 100%;
+}
+
+.clicked-image {
+    height: 90%;
+    width: 95%;
+}
+
+.image-modal-right {
+    width: 50%;
+    height: 100%;
+}
+
+.image-modal-profile-icon {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    margin-bottom: 5px;
+}
+
+.image-modal-username {
+    margin-top: 10px;
+    margin-left: 10px;
+    position: absolute; 
+    font-weight: bold;
+}
+
+/* remove outline from image modal */
+.Profile-modalStyle-5 {
+    outline: 0;
+    border-radius: 5px;
+    border: 2px solid rgb(215, 215, 215);
+}
