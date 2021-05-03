@@ -76,10 +76,10 @@ class Profile extends Component {
             isLoggedIn: sessionStorage.getItem("access-token") == null ? false : true,
             accessToken:sessionStorage.getItem("access-token"),
             imageData: [],
-            profilePicture: "",
-            username: "tejas_cricketer",
+            profilePicture: "https://scontent.cdninstagram.com/v/t51.29350-15/116007663_2971510962975451_2540312586520375176_n.jpg?_nc_cat=104&ccb=1-3&_nc_sid=8ae9d6&_nc_ohc=jHT5B84rqzgAX-H9hA8&_nc_ht=scontent.cdninstagram.com&oh=61c7422cbaf470935836a5af0f890b0e&oe=60B2788B",
+            username: "",
             fullName: "Tejas S",
-            noOfPosts: 10,
+            noOfPosts: "",
             follows: 100,
             followedBy: 100,
             modalIsOpen: false,
@@ -106,6 +106,13 @@ class Profile extends Component {
             .then((json) => {
                 // Storing media objects as an array of objects in state variable called mediaIdsAndCaptions
                 this.setState({ mediaIdsAndCaptions: json.data });
+
+                //count the number of posts and set noOfPosts state variable
+                let postCount = 0;
+                this.state.mediaIdsAndCaptions.forEach(() => {
+                    postCount +=1;
+                });
+                this.setState({ noOfPosts: postCount});
                 
                 // loop through each object in mediaIdsAndCaptions array to get imageData
                 this.state.mediaIdsAndCaptions.forEach((image, i) => {
@@ -128,8 +135,8 @@ class Profile extends Component {
                         });
                         this.setState({ imageData: this.state.imageData.concat(json) }); // add each object to array imageData
 
-                        if(i === 0) { // Since there is no Api to get profile picture, used 1st image from the response as profile picture
-                            this.setState({ profilePicture: json.media_url });
+                        if(i === 0) { // Set username from the API response - here we get same username for all the posts
+                            this.setState({ username: json.username});
                         }
                     })
                 })
