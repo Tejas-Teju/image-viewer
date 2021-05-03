@@ -57,7 +57,7 @@ class Home extends Component {
         super();
         this.state = {
             isLoggedIn: sessionStorage.getItem("access-token") == null ? false : true,
-            profilePicture: "",
+            profilePicture: "https://scontent.cdninstagram.com/v/t51.29350-15/116007663_2971510962975451_2540312586520375176_n.jpg?_nc_cat=104&ccb=1-3&_nc_sid=8ae9d6&_nc_ohc=jHT5B84rqzgAX-H9hA8&_nc_ht=scontent.cdninstagram.com&oh=61c7422cbaf470935836a5af0f890b0e&oe=60B2788B",
             accessToken: sessionStorage.getItem("access-token"),
             mediaIdsAndCaptions: [],
             imageData: [],
@@ -101,10 +101,6 @@ class Home extends Component {
                             }
                         });
                         this.setState({ imageData: this.state.imageData.concat(json) }); // add each object to array imageData
-
-                        if(i === 0) { // Since there is no Api to get profile picture, used 1st image from the response as profile picture
-                            this.setState({ profilePicture: json.media_url });
-                        }
                     })
                 })
             })
@@ -201,7 +197,7 @@ class Home extends Component {
                     <Redirect to= "/"/>
                     :
                     <div>
-                        <Header profilePicture={this.state.profilePicture} showSearchBox={this.state.isLoggedIn ? true : false} showProfileIcon={this.state.isLoggedIn ? true : false} onSearchTextChange={this.onSearchTextChange}/>
+                        <Header profilePicture={this.state.profilePicture} showSearchBox={this.state.isLoggedIn ? true : false} showProfileIcon={this.state.isLoggedIn ? true : false} onSearchTextChange={this.onSearchTextChange} showMyAccount={true} />
                         <div className="flex-container">
                             <Grid container spacing={3} wrap="wrap" alignContent="center" className={classes.grid}>
                                 {/* Iteration over imageData array and render each element of array */}

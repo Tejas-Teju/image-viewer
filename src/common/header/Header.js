@@ -70,7 +70,7 @@ class Header extends Component {
                     :
                     <div>
                         <header className="app-header">
-                            <a href='/' id="logo">Image Viewer</a>
+                            <a href='/home' id="logo">Image Viewer</a>
                             {/* Search box shown only when showSearchBox is true */} 
                             {this.props.showSearchBox ?                  
                                 <span className="header-searchbox">
@@ -88,11 +88,16 @@ class Header extends Component {
                                     </IconButton>
                                     <Menu id="profile-menu" anchorEl={this.state.anchorEl} open={this.state.menuIsOpen} onClose={this.profileButtonClickedHandler}>
                                         <MenuList className={classes.menuList}>
-                                            {/* Go to Profile page on clicking "My Account" */}
-                                            <Link to={"/profile"} className={classes.menuItems} underline="none" color={"default"}> 
-                                                <MenuItem className={classes.menuItems}>My Account</MenuItem>
-                                            </Link>
-                                            <div className="horizontal-line"> </div>
+                                            {this.props.showMyAccount === true ?
+                                                <div>
+                                                    {/* Go to Profile page on clicking "My Account" */}
+                                                    <Link to={"/profile"} className={classes.menuItems} underline="none" color={"default"}> 
+                                                        <MenuItem className={classes.menuItems}>My Account</MenuItem>
+                                                    </Link>
+                                                    <div className="horizontal-line"> </div>
+                                                </div>
+                                                : ""
+                                            }
                                             {/* Go to Login page on clicking "Logout" */}
                                             <MenuItem className="menu-items" onClick={this.onLogOutClickedHandler}>Logout</MenuItem>
                                         </MenuList>
