@@ -95,7 +95,7 @@ class Home extends Component {
                         json.time = d[1].trim(); // after splitting data in 1st index is time, add a property time to the current object
                         json.caption = image.caption.split("\n#")[0]; // add a property caption to the current object by extracting it from mediaIdsAndCaptions array 
                         json.hastags = "";
-                        image.caption.split(" ").forEach((element) => {
+                        image.caption.split(/\s+/).forEach((element) => {
                             if(element[0] === "#") {
                                 json.hastags = json.hastags + " " + element;
                             }
