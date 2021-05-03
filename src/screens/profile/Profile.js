@@ -13,6 +13,9 @@ import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import IconButton from '@material-ui/core/IconButton'
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 const styles = theme => ({
     fab: {
@@ -70,16 +73,10 @@ class Profile extends Component {
             fullNameRequired: "dispNone",
             newName: "",
             imageModalIsOpen: false,
-            currentImageId: "",
-            currentImage: "",
+            currentImage: {},
             currentProfilePicture: "",
-            currentImgName: "",
-            currentCaption: "",
-            currentTags: "",
             userLiked: false,
-            currentLikeStatus: "",
-            defaultLikes: 1,
-            likeCounts: "",
+            defaultLikes: 2,
         }
     }
 
@@ -154,14 +151,8 @@ class Profile extends Component {
     imageClickHandler = (image) => {
         this.setState({
             imageModalIsOpen: true,
-            currentImageId: image.id,
-            currentImage: image.media_url,
+            currentImage: image,
             currentProfilePicture: this.state.profilePicture,
-            currentImgName: this.state.fullName,
-            currentCaption: image.caption,
-            currentTags: image.hastags,
-            currentLikeStatus: this.state.userLiked, //***change needed
-            likeCounts: this.state.defaultLikes, //***changes needed
         });
     }
 
@@ -169,11 +160,26 @@ class Profile extends Component {
     imageCloseModalHandler = () => {
         this.setState({ imageModalIsOpen: false });
     }
+
+    // This method increments and decrements the number of like and adds the userLiked and count to object
+    likeBtnHandler = (imageId) => {
+        let obj = this.state.imageData.find(element => element.id === imageId);
+
+        if (obj.userLiked === true) { // if user already liked the image then decrement the count
+            obj.count = obj.count - 1;
+            obj.userLiked = false;
+            this.setState({});
+        } else { // if user didn't like the image then increment the count and set userLiked to true
+            obj.count = this.state.defaultLikes + 1;
+            obj.userLiked = true;
+            this.setState({});
+        }
+    }
     
     render() {
         //custom Styles are stored in classes
         const { classes } = this.props;
-
+        const { currentImage, defaultLikes } = this.state;
         return(
             <div>
                 {this.state.isLoggedIn === false ?
@@ -226,12 +232,31 @@ class Profile extends Component {
                                 <Modal className={classes.imageModal} open={this.state.imageModalIsOpen} onClose={this.imageCloseModalHandler} aria-labelledby="individual-image-modal">
                                     <div className={classes.modalStyle}>
                                         <div className="image-modal-left">
-                                            <img className="clicked-image" src={this.state.currentImage} alt={this.state.currentImgName} />
+                                            <img className="clicked-image" src={this.state.currentImage.media_url} alt={this.state.fullName} />
                                         </div>
                                         <div className="image-modal-right">
-                                            <img className="image-modal-profile-icon" src={this.state.currentProfilePicture} alt={this.state.fullName} />
-                                            <span className="image-modal-username">{this.state.username}</span>
-                                            <div className="horizontal-line"></div>
+                                            <div className="right-top">
+                                                <img className="image-modal-profile-icon" src={this.state.currentProfilePicture} alt={this.state.fullName} />
+                                                <span className="image-modal-username">{this.state.username}</span>
+                                                <div className="horizontal-line"></div>
+                                            </div>
+                                            <div className="right-middle">
+                                                <div >{this.state.currentImage.caption}</div>
+                                                <div className="image-hashtags">{this.state.currentImage.hastags}</div>
+                                            </div>
+                                            <div className="right-botton">
+                                                <IconButton id="like-button" aria-label="like-button" onClick={() => this.likeBtnHandler(this.state.currentImage.id)}>
+                                                    {/* Border is red if user already liked the image else border is displayed */}
+                                                    {currentImage.userLiked === undefined || currentImage.userLiked === false ? 
+                                                        <FavoriteBorderIcon className="like-icon" fontSize="large" /> : <FavoriteIcon className="liked-icon" fontSize="large" />}
+                                                </IconButton>
+                                                {/* if count is 1, like is displayed else likes is displayed*/}
+                                                {currentImage.count === undefined ? 
+                                                    defaultLikes === 1 ? <span>{defaultLikes} like</span> : <span>{defaultLikes} likes</span> 
+                                                    : 
+                                                    currentImage.count === 1 ? <span>{currentImage.count} like</span> : <span>{currentImage.count} likes</span>
+                                                }
+                                            </div>
                                         </div>
                                     </div>
                                 </Modal>

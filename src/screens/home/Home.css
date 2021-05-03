@@ -35,7 +35,8 @@
 
 /* style for the like button  */
 #like-button {
-    padding-left: 0;
+    padding: 12px 0;
+    margin-right: 12px;
 }
 
 /* On hover background color should be white(#fff) */
