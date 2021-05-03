@@ -201,7 +201,7 @@ class Home extends Component {
                     <Redirect to= "/"/>
                     :
                     <div>
-                        <Header profilePicture={this.state.profilePicture} showSearchBox={this.state.isLoggedIn ? true : false} showProfileIcon={this.state.isLoggedIn ? true : false} onSearchTextChange={this.onSearchTextChange}/>
+                        <Header profilePicture={this.state.profilePicture} showSearchBox={this.state.isLoggedIn ? true : false} showProfileIcon={this.state.isLoggedIn ? true : false} onSearchTextChange={this.onSearchTextChange} showMyAccount={true} />
                         <div className="flex-container">
                             <Grid container spacing={3} wrap="wrap" alignContent="center" className={classes.grid}>
                                 {/* Iteration over imageData array and render each element of array */}
