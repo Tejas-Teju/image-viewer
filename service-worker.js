@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.2/workbox-sw.js");
 
 importScripts(
-  "/Tejas-Teju/image-viewer.git/precache-manifest.b40f60749c974b43f8f5366dc3c0099c.js"
+  "/Tejas-Teju/image-viewer/precache-manifest.146421ee2665745665d12748c1fc8d4c.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/Tejas-Teju/image-viewer.git/index.html", {
+workbox.routing.registerNavigationRoute("/Tejas-Teju/image-viewer/index.html", {
   
   blacklist: [/^\/_/,/\/[^/]+\.[^/]+$/],
 });
