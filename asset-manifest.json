@@ -1,13 +1,13 @@
 {
-  "main.css": "/Tejas-Teju/image-viewer/static/css/main.c0edf200.chunk.css",
-  "main.js": "/Tejas-Teju/image-viewer/static/js/main.32e464a6.chunk.js",
-  "main.js.map": "/Tejas-Teju/image-viewer/static/js/main.32e464a6.chunk.js.map",
-  "static/js/1.8ddf26ce.chunk.js": "/Tejas-Teju/image-viewer/static/js/1.8ddf26ce.chunk.js",
-  "static/js/1.8ddf26ce.chunk.js.map": "/Tejas-Teju/image-viewer/static/js/1.8ddf26ce.chunk.js.map",
-  "runtime~main.js": "/Tejas-Teju/image-viewer/static/js/runtime~main.14fbe9dd.js",
-  "runtime~main.js.map": "/Tejas-Teju/image-viewer/static/js/runtime~main.14fbe9dd.js.map",
-  "static/css/main.c0edf200.chunk.css.map": "/Tejas-Teju/image-viewer/static/css/main.c0edf200.chunk.css.map",
-  "index.html": "/Tejas-Teju/image-viewer/index.html",
-  "precache-manifest.146421ee2665745665d12748c1fc8d4c.js": "/Tejas-Teju/image-viewer/precache-manifest.146421ee2665745665d12748c1fc8d4c.js",
-  "service-worker.js": "/Tejas-Teju/image-viewer/service-worker.js"
+  "main.css": "/image-viewer/static/css/main.c0edf200.chunk.css",
+  "main.js": "/image-viewer/static/js/main.32e464a6.chunk.js",
+  "main.js.map": "/image-viewer/static/js/main.32e464a6.chunk.js.map",
+  "static/js/1.8ddf26ce.chunk.js": "/image-viewer/static/js/1.8ddf26ce.chunk.js",
+  "static/js/1.8ddf26ce.chunk.js.map": "/image-viewer/static/js/1.8ddf26ce.chunk.js.map",
+  "runtime~main.js": "/image-viewer/static/js/runtime~main.8bc8a2e0.js",
+  "runtime~main.js.map": "/image-viewer/static/js/runtime~main.8bc8a2e0.js.map",
+  "static/css/main.c0edf200.chunk.css.map": "/image-viewer/static/css/main.c0edf200.chunk.css.map",
+  "index.html": "/image-viewer/index.html",
+  "precache-manifest.7e58fcaeafe12168ff7af0e5e1d897a7.js": "/image-viewer/precache-manifest.7e58fcaeafe12168ff7af0e5e1d897a7.js",
+  "service-worker.js": "/image-viewer/service-worker.js"
 }
